@@ -1,0 +1,292 @@
+openapi: 3.0.3
+info:
+  title: Journals
+  version: "0.1"
+  description: ...
+
+servers:
+  - url: http://localhost:8085/ca/api
+    description: LOCAL
+  - url: https://dev.please.rework.me/api
+    description: DEV
+
+tags:
+  - name: Journal
+    description: journal tag
+
+paths:
+  /journal:
+    get:
+      operationId: getJournals
+      summary: Gets all Journals.
+      security:
+        - openId:
+            - journal_read
+      tags:
+        - Journal
+      description: |
+        ...
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Journals"
+        "400": # Bad Request
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "401": # Unauthorized
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "403": # Forbidden
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "412": # Preconditions (Vorbedingungen) not met
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "500": # Internal server error
+          $ref: "#/components/responses/DefaultProblemResponse"
+    post:
+      operationId: saveJournal
+      summary: creates and persists a new Journal.
+      security:
+        - openId:
+            - journal_write
+      tags:
+        - Journal
+      description: |
+        ...
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Journal"
+
+      responses:
+        "200":
+          description: 'new journal has successfully been stored'
+        "400": # Bad Request
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "401": # Unauthorized
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "403": # Forbidden
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "412": # Preconditions (Vorbedingungen) not met
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "500": # Internal server error
+          $ref: "#/components/responses/DefaultProblemResponse"
+    put:
+      operationId: updateJournal
+      summary: updates a Journal.
+      security:
+        - openId:
+            - journal_write
+      tags:
+        - Journal
+      description: |
+        ...
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Journal"
+
+      responses:
+        "200":
+          description: 'the journal has successfully been updated'
+        "400": # Bad Request
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "401": # Unauthorized
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "403": # Forbidden
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "412": # Preconditions (Vorbedingungen) not met
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "500": # Internal server error
+          $ref: "#/components/responses/DefaultProblemResponse"
+    delete:
+      operationId: deleteJournal
+      summary: deletes a Journal.
+      security:
+        - openId:
+            - journal_write
+      tags:
+        - Journal
+      description: |
+        ...
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Journal"
+
+      responses:
+        "200":
+          description: 'the journal has successfully been deleted'
+        "400": # Bad Request
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "401": # Unauthorized
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "403": # Forbidden
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "412": # Preconditions (Vorbedingungen) not met
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "500": # Internal server error
+          $ref: "#/components/responses/DefaultProblemResponse"
+
+  /timed-event:
+    get:
+      operationId: getTimedEvents
+      summary: Gets all timed Events.
+      security:
+        - openId:
+            - timed_event_read
+      tags:
+        - Timed-Event
+      description: |
+        ...
+
+      responses:
+        "200":
+          $ref: "#/components/responses/TimedEvents"
+        "400": # Bad Request
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "401": # Unauthorized
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "403": # Forbidden
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "412": # Preconditions (Vorbedingungen) not met
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "500": # Internal server error
+          $ref: "#/components/responses/DefaultProblemResponse"
+    post:
+      operationId: saveTimedEvent
+      summary: creates and persists a new TimedEvent.
+      security:
+        - openId:
+            - timed_event_write
+      tags:
+        - Timed-Event
+      description: |
+        ...
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimedEvent"
+
+      responses:
+        "200":
+          $ref: "#/components/responses/TimedEvents"
+        "400": # Bad Request
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "401": # Unauthorized
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "403": # Forbidden
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "412": # Preconditions (Vorbedingungen) not met
+          $ref: "#/components/responses/DefaultProblemResponse"
+        "500": # Internal server error
+          $ref: "#/components/responses/DefaultProblemResponse"
+
+
+components:
+  # ********** security schemes **********
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://to.be.configured.in.cloud/openid-config
+
+  schemas:
+    DefaultProblem:
+      description: "TODO"
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: "HTTP status code returned for the problem."
+          example: 400
+        type:
+          type: string
+          format: url
+          description: "URI pointing to a human readable documentation."
+          default: about:blank
+        title:
+          type: string
+          description: "Short, human readable description of the problem."
+          example: The provided e-mail address is already taken.
+        detail:
+          type: string
+          description: "Human readable explanation of the problem."
+          example: The e-mail adress serves as an identifier and thus can only be taken once.
+        instance:
+          type: string
+          description: "Endpoint where the problem occurred."
+          example: /users
+      required:
+        - status
+        - type
+        - title
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string
+        dateFrom:
+          type: string
+          format: date
+        dateTo:
+          type: string
+          format: date
+
+    Journal:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Event"
+      properties:
+        reference:
+          type: array
+          items:
+            $ref: "#/components/schemas/Journal"
+
+    TimedEvent:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Event"
+      properties:
+        startEventOn:
+          type: string
+          format: date
+        stopEventOn:
+          type: string
+          format: date
+
+  responses:
+    Journals:
+      description: "..."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Journal"
+
+    TimedEvents:
+      description: "..."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/TimedEvent"
+
+    DefaultProblemResponse: # fallback problem
+      description: "Anfrage konnte **nicht** erfolgreich ausgeführt werden, da ein Problem aufgetreten ist (Client- oder Server-seitig)."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultProblem"
